@@ -19,7 +19,6 @@ You can then point your web browser at `http://localhost:8888`. Data is served o
 # To Do
 
 * Update cache file path to work with `GOOS` other than `darwin`.
-* Move to a separate repo.
 * Find a better (silly) name.
 
 # License
