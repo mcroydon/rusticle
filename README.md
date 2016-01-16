@@ -23,4 +23,4 @@ You can then point your web browser at `http://localhost:8888`. Data is served o
 
 # License
 
-Rusticle is released under t MIT license.
+Rusticle is released under the MIT license.
