@@ -36,8 +36,10 @@ func getSqlitePath() string {
 		} else if runtime.GOARCH == "386" {
 			basepath = filepath.Join("C:", "Program Files", "Steam")
 		} else {
-			panic(fmt.Sprintf("Unable to handle architecture %v", runtime.GOARCH))
+			panic(fmt.Sprintf("Unable to handle architecture %v.", runtime.GOARCH))
 		}
+	default:
+		panic(fmt.Sprintf("Don't know where Steam lives on %v.", runtime.GOOS))
 	}
 	return filepath.Join(basepath, "SteamApps", "common", "Rust", "cache", "Storage.db")
 }
