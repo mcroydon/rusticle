@@ -3,9 +3,12 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os/user"
+	"path/filepath"
+	"runtime"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -18,6 +21,28 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8888", nil))
 }
 
+func getSqlitePath() string {
+	var basepath string
+	usr, err := user.Current()
+	checkErr(err)
+	switch runtime.GOOS {
+	case "darwin":
+		basepath = filepath.Join(usr.HomeDir, "Library", "Application Support", "Steam")
+	case "linux":
+		basepath = filepath.Join(usr.HomeDir, ".local", "share", "Steam")
+	case "windows":
+		if runtime.GOARCH == "amd64" {
+			basepath = filepath.Join("C:", "Program Files (x86)", "Steam")
+		} else if runtime.GOARCH == "386" {
+			basepath = filepath.Join("C:", "Program Files", "Steam")
+		} else {
+			panic(fmt.Sprintf("Unable to handle architecture %v", runtime.GOARCH))
+		}
+
+	}
+	return filepath.Join(basepath, "SteamApps", "common", "Rust", "cache", "Storage.db")
+}
+
 func imageHandler(w http.ResponseWriter, r *http.Request) {
 	entity := r.URL.Query().Get("entity")
 	crc := r.URL.Query().Get("crc")
@@ -28,9 +53,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := "SELECT data FROM data where entity = ? and crc = ?"
-	usr, err := user.Current()
-	checkErr(err)
-	db, err := sql.Open("sqlite3", usr.HomeDir+"/Library/Application Support/Steam/SteamApps/common/Rust/cache/Storage.db")
+	db, err := sql.Open("sqlite3", getSqlitePath())
 	defer db.Close()
 	var data []byte
 	err = db.QueryRow(query, entity, crc).Scan(&data)
@@ -53,9 +76,7 @@ func dataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	query += " order by lastaccess desc"
 
-	usr, err := user.Current()
-	checkErr(err)
-	db, err := sql.Open("sqlite3", usr.HomeDir+"/Library/Application Support/Steam/SteamApps/common/Rust/cache/Storage.db")
+	db, err := sql.Open("sqlite3", getSqlitePath())
 	checkErr(err)
 	defer db.Close()
 
