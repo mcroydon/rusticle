@@ -16,10 +16,6 @@ To run:
 
 You can then point your web browser at `http://localhost:8888`. Data is served over json at `http://localhost:8888/data` and individual images are served at `http://localhost:8888/img?entity=<entity>&crc=<crc>`.
 
-# To Do
-
-* Find a better (silly) name.
-
 # License
 
 Rusticle is released under the MIT license.
