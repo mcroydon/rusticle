@@ -38,7 +38,6 @@ func getSqlitePath() string {
 		} else {
 			panic(fmt.Sprintf("Unable to handle architecture %v", runtime.GOARCH))
 		}
-
 	}
 	return filepath.Join(basepath, "SteamApps", "common", "Rust", "cache", "Storage.db")
 }
