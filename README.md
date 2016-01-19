@@ -18,9 +18,7 @@ You can then point your web browser at `http://localhost:8888`. Data is served o
 
 ### To Do
 
-* Exhaustively check possible steam directory locations rather than be fancy with runtime.GOOS.
 * Allow for env var or cmdline argument for Steam location in case it's not in the standard spot.
-* Don't use panic, let errors bubble up and present useful/actionable information.
 
 # License
 
